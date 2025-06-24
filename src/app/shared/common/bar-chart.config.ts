@@ -15,11 +15,17 @@ export  const  barChartConfig:Highcharts.Options = {
       }
     }
   },
+
+  title:{
+    text:''
+  },
+
   yAxis: {
     min: 0,
     title: {
       text: 'Output (pieces)'
-    }
+    },
+
   },
   legend: {
     enabled: false
@@ -49,14 +55,14 @@ export  const  barChartConfig:Highcharts.Options = {
 
     ],
     dataLabels: {
-      enabled: false,
+      enabled: true,
       rotation: -0,
       inside: true,
       verticalAlign: 'top',
       format: '{point.y:.1f}', // one decimal
-      y: -24, // 10 pixels down from the top
+      y: 10, // 10 pixels down from the top
       style: {
-        fontSize: '10px',
+        fontSize: '12px',
         fontFamily: 'Verdana, sans-serif',
         color: '#eee',
       }

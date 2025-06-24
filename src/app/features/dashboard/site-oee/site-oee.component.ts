@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {HighchartsChartModule} from 'highcharts-angular';
 import {NgIf} from '@angular/common';
 import * as Highcharts from 'highcharts';
@@ -8,7 +8,9 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/mat
 import {MatIconButton} from '@angular/material/button';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatIcon} from '@angular/material/icon';
-import {DashboardService} from '../../../core/services/dashboard.service';
+import {DashboardService} from '../shared/dashboard.service';
+import {Subscription} from 'rxjs';
+import {ChartRefreshService} from '../../../core/services/chart-refresh.service';
 
 
 @Component({
@@ -29,13 +31,14 @@ import {DashboardService} from '../../../core/services/dashboard.service';
   templateUrl: './site-oee.component.html',
   styleUrl: './site-oee.component.scss'
 })
-export class SiteOeeComponent  implements OnInit {
+export class SiteOeeComponent  implements OnInit ,OnDestroy {
 
+  count:number=0;
   title = 'All Site OEE';
 
   highcharts:typeof Highcharts=Highcharts;
   isHighcharts =typeof Highcharts==="object";
-  chartOptions: {}= {
+  chartOptions: Highcharts.Options= {
     chart: {
       type: 'solidgauge',
       height: "null",
@@ -52,7 +55,16 @@ export class SiteOeeComponent  implements OnInit {
         color:"green",
       }
     },
-    tooltip: 'null',
+    subtitle:{
+      text:'- 0 %',
+      align:"center",
+      verticalAlign:"middle",
+      y:50,
+      style: {
+        fontSize: "1.2rem",
+        color:"#aaa",
+      }
+    },
 
     pane: {
       center: ['50%', '85%'],
@@ -111,10 +123,7 @@ export class SiteOeeComponent  implements OnInit {
         innerRadius: '98%',
         y: 81
       }],
-      custom: {
-        icon: 'filter',
-        iconColor: '#C0C0C0'
-      }
+      type:'solidgauge'
     }, {
       name: 'Quality Rates',
       data: [{
@@ -123,10 +132,7 @@ export class SiteOeeComponent  implements OnInit {
         innerRadius: '84%',
         y: 70
       }],
-      custom: {
-        icon: '<mat-icon matListItemIcon>workspace_premium</mat-icon>',
-        iconColor: '#ffffff'
-      }
+      type:'solidgauge'
     }, {
       name: 'Availability',
       data: [{
@@ -135,20 +141,86 @@ export class SiteOeeComponent  implements OnInit {
         innerRadius: '68%',
         y: 50
       }],
-      custom: {
-        icon: 'commenting-o',
-        iconColor: '#303030'
-      }
+      type:'solidgauge'
     }],
     credits: {
       enabled: false,
     }
   };
 
+  private  subscriber!: Subscription;
   private  dashboardService=inject(DashboardService);
+  private  refreshService=inject(ChartRefreshService)
 
   ngOnInit(): void {
+    this.formatChartsData();
+    this.subscriber=this.refreshService.refresh$.subscribe(()=>{
+      this.count++
+      this.formatChartsData();
+      console.log(`chart has been refreshed ${this.count}`);
+    })
+  }
 
+  formatChartsData() {
+
+    this.dashboardService.getSiteOEE().subscribe(data => {
+      const oee:string=data.result.oee.toString();
+      let qualityRate=((data.result.totalQty-data.result.ngQty)/data.result.totalQty)*100;
+      this.chartOptions.title={
+        text:`${oee}%`,
+        align:"center",
+        verticalAlign:"middle",
+        y:130,
+        style:{
+          fontSize: "2rem",
+          color:this.valueMappingColor(data.result.oee)
+        }
+      }
+      this.chartOptions.series=[
+        {
+          name: "Performance",
+          data:[{
+            color: this.valueMappingColor(data.result.performanceRate),
+            radius: '110%',
+            innerRadius: '98%',
+            y: data.result.performanceRate
+          }],
+          type: "solidgauge",
+        },{
+          name: "Quality Rates",
+          data:[{
+            color: this.valueMappingColor(qualityRate),
+            radius: '96%',
+            innerRadius: '84%',
+            y: qualityRate
+          }],
+          type: "solidgauge",
+        },{
+          name: "Availability",
+          data:[{
+            color: this.valueMappingColor(data.result.timeActivationRate),
+            radius: '82%',
+            innerRadius: '68%',
+            y: data.result.timeActivationRate
+          }],
+          type: "solidgauge",
+        }
+      ]
+    })
+  }
+
+  valueMappingColor(value:number):string {
+    if(value>80){
+      return '#55BF3B';
+    }else if(value<=60){
+      return '#DF5353';
+    }
+
+    return '#DDDF0D';
+  }
+
+  ngOnDestroy(): void {
+    this.subscriber.unsubscribe();
   }
 
 }
