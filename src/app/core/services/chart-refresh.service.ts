@@ -5,7 +5,6 @@ import {Subject} from 'rxjs';
   providedIn: 'root'
 })
 export class ChartRefreshService {
-
   private  refreshSubject=new Subject<void>();
   refresh$ = this.refreshSubject.asObservable();
 
