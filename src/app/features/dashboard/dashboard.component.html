@@ -1,18 +1,15 @@
 
 <div class="grid-container">
-
-
-   <!-- @for (card of cards | async; track card) {
+ <!-- <mat-grid-list rowHeight="350px"
+                 cols="3">
+    @for (card of cards | async; track card) {
       <mat-grid-tile [colspan]="card.cols" [rowspan]="card.rows">
         <CMI-dashboard-item [title]="card.title"
                             [chartOptions]="card.options"
         />
       </mat-grid-tile>
-    } -->
-    <mat-grid-list rowHeight="350px" cols="3" >
+    }
+    </mat-grid-list> -->
 
-        <CMI-site-oee ></CMI-site-oee>
-
-    </mat-grid-list>
-
+<CMI-site-oee></CMI-site-oee>
 </div>

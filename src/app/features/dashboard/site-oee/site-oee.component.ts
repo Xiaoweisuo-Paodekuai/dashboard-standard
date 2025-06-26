@@ -1,9 +1,4 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {HighchartsChartModule} from 'highcharts-angular';
-import {NgIf} from '@angular/common';
-import * as Highcharts from 'highcharts';
-import  'highcharts/highcharts-more'
-import  'highcharts/modules/solid-gauge'
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
 import {MatIconButton} from '@angular/material/button';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
@@ -11,13 +6,14 @@ import {MatIcon} from '@angular/material/icon';
 import {DashboardService} from '../shared/dashboard.service';
 import {Subscription} from 'rxjs';
 import {ChartRefreshService} from '../../../core/services/chart-refresh.service';
+import {HighchartsChartComponent,  providePartialHighcharts} from 'highcharts-angular';
+import type Highcharts from 'highcharts';
+
 
 
 @Component({
   selector: 'CMI-site-oee',
   imports: [
-    HighchartsChartModule,
-    NgIf,
     MatCard,
     MatCardContent,
     MatCardHeader,
@@ -26,18 +22,25 @@ import {ChartRefreshService} from '../../../core/services/chart-refresh.service'
     MatMenu,
     MatMenuItem,
     MatIcon,
-    MatMenuTrigger
+    MatMenuTrigger,
+    HighchartsChartComponent
+  ],
+  providers: [
+    providePartialHighcharts({
+      modules:()=>[
+        import('highcharts/esm/highcharts-more'),
+        import('highcharts/esm/modules/solid-gauge'),
+      ]
+    })
   ],
   templateUrl: './site-oee.component.html',
   styleUrl: './site-oee.component.scss'
 })
 export class SiteOeeComponent  implements OnInit ,OnDestroy {
 
-  count:number=0;
   title = 'All Site OEE';
 
-  highcharts:typeof Highcharts=Highcharts;
-  isHighcharts =typeof Highcharts==="object";
+
   chartOptions: Highcharts.Options= {
     chart: {
       type: 'solidgauge',
@@ -153,12 +156,12 @@ export class SiteOeeComponent  implements OnInit ,OnDestroy {
   private  refreshService=inject(ChartRefreshService)
 
   ngOnInit(): void {
-    this.formatChartsData();
-    this.subscriber=this.refreshService.refresh$.subscribe(()=>{
+  /*   this.formatChartsData();
+    this.subscriber = this.refreshService.refresh$.subscribe(() => {
       this.count++
       this.formatChartsData();
       console.log(`chart has been refreshed ${this.count}`);
-    })
+    }) */
   }
 
   formatChartsData() {
@@ -222,5 +225,12 @@ export class SiteOeeComponent  implements OnInit ,OnDestroy {
   ngOnDestroy(): void {
     this.subscriber.unsubscribe();
   }
+
+
+
+  chartInstance(chart: Highcharts.Chart) {
+    console.log('Chart instance received', chart);
+  }
+
 
 }

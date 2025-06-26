@@ -1,6 +1,5 @@
 import * as Highcharts from "highcharts";
-import 'highcharts/highcharts-more'
-import 'highcharts/modules/solid-gauge'
+
 
 
 export const solidGaugeConfig:Highcharts.Options = {

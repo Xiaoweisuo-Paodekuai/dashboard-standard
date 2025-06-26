@@ -18,10 +18,9 @@
   </mat-card-header>
   <mat-card-content class="dashboard-card-content">
     <highcharts-chart
-      class="chart-wrapper"
-      *ngIf="isHighcharts"
-      [Highcharts]="highcharts"
+      class="chart-wrapper highcharts-dark"
       [options]="chartOptions"
+      (chartInstance)="chartInstance($event)"
     >
     </highcharts-chart>
   </mat-card-content>

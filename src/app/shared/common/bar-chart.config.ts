@@ -1,5 +1,5 @@
 import * as Highcharts from "highcharts";
-import 'highcharts/highcharts-more'
+
 
 export  const  barChartConfig:Highcharts.Options = {
   chart: {
@@ -32,6 +32,9 @@ export  const  barChartConfig:Highcharts.Options = {
   },
   tooltip: {
     pointFormat: 'Population in 2021: <b>{point.y:.1f} millions</b>'
+  },
+  accessibility:{
+    enabled: false
   },
   series: [{
     name: 'Population',

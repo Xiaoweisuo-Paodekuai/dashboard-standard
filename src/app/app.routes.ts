@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
-import {DashboardHomeComponent} from './features/dashboard/dashboard-home/dashboard-home.component';
 import {NotFoundComponent} from './shared/components/not-found/not-found.component';
+import {DashboardComponent} from './features/dashboard/dashboard.component';
+
 
 export const routes: Routes = [
   {
     path: 'dashboard',
-    component:DashboardHomeComponent
+    component:DashboardComponent
   },
   {
     path: '',
