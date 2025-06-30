@@ -1,30 +1,71 @@
 
+<div fxLayout="column"  fxFlexAlign="space-around center" fxLayoutGap="16">
+  <div>
+    <mat-card class="dashboard-card">
+      <mat-card-header>
+        <mat-card-title class="card-title">
+          {{title}}
+          <button mat-icon-button class="more-button"
+                  [matMenuTriggerFor]="menu"
+                  aria-label="Toggle menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item>Expand</button>
+            <button mat-menu-item>Remove</button>
+          </mat-menu>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="dashboard-card-content">
+            <highcharts-chart
+              class="chart-wrapper highcharts-dark"
+              [options]="chartOptions"
+              (chartInstance)="chartInstance($event)"
+            >
+            </highcharts-chart>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div>
+    <mat-card class="dashboard-card">
+      <mat-card-header>
+        <mat-card-title class="card-title">
+          OEE Details
+        </mat-card-title>
+        <mat-card-subtitle class="card-subtitle">
+          Performance,Quality Rate,Availiability
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="dashboard-card-content">
+        <div fxLayout="row" fxLayoutAlign="space-around center" >
+          <div>
+            <highcharts-chart  class="donut-chart"
+              [options]="donutOption"
+            />
+          </div>
+
+          <div>
+            <highcharts-chart  class="donut-chart"
+                               [options]="donutOption"
+            />
+          </div>
+
+          <div>
+            <highcharts-chart
+              class="donut-chart"
+              [options]="donutOption"
+            />
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
 
-<mat-card class="dashboard-card">
-  <mat-card-header>
-    <mat-card-title>
-      {{title}}
-      <button mat-icon-button class="more-button"
-              [matMenuTriggerFor]="menu"
-              aria-label="Toggle menu">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu" xPosition="before">
-        <button mat-menu-item>Expand</button>
-        <button mat-menu-item>Remove</button>
-      </mat-menu>
-    </mat-card-title>
-  </mat-card-header>
-  <mat-card-content class="dashboard-card-content">
-    <highcharts-chart
-      class="chart-wrapper highcharts-dark"
-      [options]="chartOptions"
-      (chartInstance)="chartInstance($event)"
-    >
-    </highcharts-chart>
-  </mat-card-content>
-</mat-card>
+</div>
+
+
 
 
 

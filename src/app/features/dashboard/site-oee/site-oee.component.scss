@@ -6,7 +6,15 @@ dashboard-card {
   left: 15px;
   right: 15px;
   bottom: 15px;
+  color: white;
+  border-radius: 16px;
 }
+
+.card-title {
+  color: white;
+}
+
+
 
 .more-button {
   position: absolute;
@@ -16,11 +24,26 @@ dashboard-card {
 
 .dashboard-card-content {
   text-align: center;
+
 }
 
 
 .chart-wrapper{
   display: block;
   width: 100%;
-  height: 270px;
+  height: 400px;
+}
+
+.donut-chart {
+  display: block;
+  width: 160px;
+  height: 160px;
+}
+
+.card-subtitle {
+  color:#eee;
+}
+
+.example-margin {
+  margin: 0 10px;
 }

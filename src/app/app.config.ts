@@ -19,8 +19,7 @@ export const appConfig: ApplicationConfig = {
         return [
           import('highcharts/esm/highcharts-more'),
           import('highcharts/esm/modules/accessibility'),
-          import('highcharts/esm/modules/exporting'),
-          import('highcharts/esm/themes/sunset')
+          import('highcharts/esm/themes/dark-unica')
         ];
       }
     })

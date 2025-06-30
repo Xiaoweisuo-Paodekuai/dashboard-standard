@@ -1,5 +1,5 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
+import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
 import {MatIconButton} from '@angular/material/button';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatIcon} from '@angular/material/icon';
@@ -7,7 +7,9 @@ import {DashboardService} from '../shared/dashboard.service';
 import {Subscription} from 'rxjs';
 import {ChartRefreshService} from '../../../core/services/chart-refresh.service';
 import {HighchartsChartComponent,  providePartialHighcharts} from 'highcharts-angular';
-import type Highcharts from 'highcharts';
+import * as Highcharts from 'highcharts';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
+import {MatProgressSpinner, ProgressSpinnerMode} from '@angular/material/progress-spinner';
 
 
 
@@ -23,7 +25,10 @@ import type Highcharts from 'highcharts';
     MatMenuItem,
     MatIcon,
     MatMenuTrigger,
-    HighchartsChartComponent
+    HighchartsChartComponent,
+    FlexLayoutModule,
+    MatCardSubtitle,
+    MatProgressSpinner
   ],
   providers: [
     providePartialHighcharts({
@@ -39,59 +44,76 @@ import type Highcharts from 'highcharts';
 export class SiteOeeComponent  implements OnInit ,OnDestroy {
 
   title = 'All Site OEE';
+  mode:ProgressSpinnerMode = 'determinate';
 
+
+  trackColors=[
+    'rgba(44,175,254,0.3)',
+    'rgba(84,79,197,0.3)',
+    'rgba(0,226,114,0.3)',
+    'rgba(0,226,114,1)'
+  ]
 
   chartOptions: Highcharts.Options= {
     chart: {
       type: 'solidgauge',
       height: "null",
-
+      backgroundColor: 'transparent',
     },
 
     title: {
-      text:'- 0 % <br> 80%',
+      text:'- 80%',
       align:"center",
       verticalAlign:"middle",
-      y:100,
+      y:20,
       style: {
-        fontSize: "2rem",
-        color:"green",
+        fontSize: "2.5rem",
+        color:this.trackColors[3],
       }
     },
     subtitle:{
-      text:'- 0 %',
+      text:'- OEE',
       align:"center",
       verticalAlign:"middle",
-      y:50,
+      y:-30,
       style: {
         fontSize: "1.2rem",
         color:"#aaa",
       }
     },
+    legend:{
+
+      backgroundColor: 'transparent',
+       itemStyle:{
+         fontSize: "1rem",
+         fontFamily: "Roboto",
+       }
+    },
+
 
     pane: {
-      center: ['50%', '85%'],
-      startAngle: -90,
-      endAngle: 90,
-      size:'150%',
+      center: ['50%', '50%'],
+      startAngle: 0,
+      endAngle: 360,
+
       background: [{ // Track for Performance
-        outerRadius: '110%',
-        innerRadius: '98%',
-        backgroundColor: "#C0C0C0",
+        outerRadius: '112%',
+        innerRadius: '88%',
+        backgroundColor:this.trackColors[0],
         borderWidth: 0,
-        shape:'arc'
+
       }, { // Track for Quality
-        outerRadius: '96%',
-        innerRadius: '84%',
-        backgroundColor: "#C0C0C0",
+        outerRadius: '87%',
+        innerRadius: '63%',
+        backgroundColor:this.trackColors[1],
         borderWidth: 0,
-        shape:'arc'
+
       }, { // Track for OA
-        outerRadius: '82%',
-        innerRadius: '68%',
-        backgroundColor: "#C0C0C0",
+        outerRadius: '62%',
+        innerRadius: '38%',
+        backgroundColor:this.trackColors[2],
         borderWidth: 0,
-        shape:'arc'
+
       }]
     },
 
@@ -99,11 +121,7 @@ export class SiteOeeComponent  implements OnInit ,OnDestroy {
       min: 0,
       max: 100,
       lineWidth: 0,
-      stops:[
-        [0.6, '#DF5353'], // red
-        [0.7, '#DDDF0D'], // yellow
-        [0.8, '#55BF3B'],
-      ],
+
       tickPositions: []
     },
 
@@ -114,48 +132,137 @@ export class SiteOeeComponent  implements OnInit ,OnDestroy {
         },
         linecap: 'round',
         stickyTracking: false,
-        rounded: true
+        rounded: true,
+        showInLegend: true,
       }
+
     },
 
     series: [{
       name: 'Performance',
       data: [{
-        color: "#C0C0C0",
-        radius: '110%',
-        innerRadius: '98%',
+        color:Highcharts.getOptions().colors![0],
+        radius: '112%',
+        innerRadius: '88%',
         y: 81
       }],
-      type:'solidgauge'
+      type:'solidgauge',
+      showInLegend: true,
+      legendSymbolColor:Highcharts.getOptions().colors![0],
     }, {
       name: 'Quality Rates',
       data: [{
-        color: "#00e272",
-        radius: '96%',
-        innerRadius: '84%',
+        color:Highcharts.getOptions().colors![1],
+        radius: '87%',
+        innerRadius: '63%',
         y: 70
       }],
-      type:'solidgauge'
+      type:'solidgauge',
+      showInLegend: true,
+      legendSymbolColor:Highcharts.getOptions().colors![1],
     }, {
       name: 'Availability',
       data: [{
-        color: "#00e272",
-        radius: '82%',
-        innerRadius: '68%',
+        color:Highcharts.getOptions().colors![2],
+        radius: '62%',
+        innerRadius: '38%',
         y: 50
       }],
-      type:'solidgauge'
+      type:'solidgauge',
+      showInLegend: true,
+      legendSymbolColor:Highcharts.getOptions().colors![2],
     }],
     credits: {
       enabled: false,
-    }
+    },
+
   };
+
+  donutOption:Highcharts.Options={
+    chart: {
+      type: 'solidgauge',
+      height: "null",
+      backgroundColor: 'transparent',
+    },
+
+    title: {
+      text:'80%',
+      align:"center",
+      verticalAlign:"middle",
+      y:0,
+      style: {
+        fontSize: "1.5rem",
+        color:this.trackColors[3],
+      }
+    },
+    legend:{
+      backgroundColor: 'transparent',
+      itemStyle:{
+        fontSize: "0.8rem",
+        fontFamily: "Roboto",
+      }
+    },
+
+
+    pane: {
+      center: ['50%', '50%'],
+      startAngle: 0,
+      endAngle: 360,
+
+      background: [{ // Track for Performance
+        outerRadius: '112%',
+        innerRadius: '68%',
+        backgroundColor:this.trackColors[0],
+        borderWidth: 0,
+
+      }]
+    },
+
+    yAxis: {
+      min: 0,
+      max: 100,
+      lineWidth: 0,
+
+      tickPositions: []
+    },
+
+    plotOptions: {
+      solidgauge: {
+        dataLabels: {
+          enabled: false
+        },
+        linecap: 'round',
+        stickyTracking: false,
+        rounded: true,
+        showInLegend: true,
+      }
+
+    },
+
+    series: [{
+      name: 'Performance',
+      data: [{
+        color:Highcharts.getOptions().colors![0],
+        radius: '112%',
+        innerRadius: '68%',
+        y: 81
+      }],
+      type:'solidgauge',
+      showInLegend: true,
+      legendSymbolColor:Highcharts.getOptions().colors![0],
+    } ],
+    credits: {
+      enabled: false,
+    },
+
+  }
 
   private  subscriber!: Subscription;
   private  dashboardService=inject(DashboardService);
   private  refreshService=inject(ChartRefreshService)
 
   ngOnInit(): void {
+
   /*   this.formatChartsData();
     this.subscriber = this.refreshService.refresh$.subscribe(() => {
       this.count++
@@ -226,10 +333,8 @@ export class SiteOeeComponent  implements OnInit ,OnDestroy {
     this.subscriber.unsubscribe();
   }
 
-
-
   chartInstance(chart: Highcharts.Chart) {
-    console.log('Chart instance received', chart);
+    console.log('Chart instance received');
   }
 
 

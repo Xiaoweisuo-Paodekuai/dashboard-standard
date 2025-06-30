@@ -2,14 +2,18 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {map} from 'rxjs/operators';
 import {solidGaugeConfig} from '../../shared/common/solid-gauge.config';
-import {barChartConfig} from '../../shared/common/bar-chart.config';
 import {ChartRefreshService} from '../../core/services/chart-refresh.service';
+import {MatGridList, MatGridTile} from '@angular/material/grid-list';
 import {SiteOeeComponent} from './site-oee/site-oee.component';
+import {LineStatusComponent} from './line-status/line-status.component';
 
 @Component({
   selector: 'CMI-dashboard',
   imports: [
-    SiteOeeComponent
+    MatGridList,
+    MatGridTile,
+    SiteOeeComponent,
+    LineStatusComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
