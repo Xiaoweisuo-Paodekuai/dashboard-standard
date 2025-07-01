@@ -5,12 +5,23 @@
 
     <mat-grid-tile [colspan]="1"
                    [rowspan]="2">
-        <CMI-site-oee class="chart-container" />
+        <CMI-site-oee class="dashboard-card" />
     </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="1"
+                  [rowspan]="1">
+      <CMI-line-status class="dashboard-card" />
+    </mat-grid-tile>
+   <mat-grid-tile [colspan]="1"
+                  [rowspan]="1">
+     <CMI-line-status class="dashboard-card" />
+   </mat-grid-tile>
 
    <mat-grid-tile [colspan]="1"
                   [rowspan]="1">
-     <CMI-line-status class="chart-container" />
+     <CMI-line-status class="dashboard-card" />
    </mat-grid-tile>
+
+
     </mat-grid-list>
 </div>

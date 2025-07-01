@@ -28,7 +28,7 @@ import {MatProgressSpinner, ProgressSpinnerMode} from '@angular/material/progres
     HighchartsChartComponent,
     FlexLayoutModule,
     MatCardSubtitle,
-    MatProgressSpinner
+
   ],
   providers: [
     providePartialHighcharts({
